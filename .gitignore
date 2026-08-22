@@ -17,3 +17,6 @@ Thumbs.db
 # Local QA output
 shots/
 *.log
+
+# Sibling template — its own repo
+barbershop/

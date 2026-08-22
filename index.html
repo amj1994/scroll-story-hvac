@@ -3,10 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
 <title>Tenth Name — Emergency Heat, Seven Days</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,700&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
 <style>
 :root{
   /* Ground: oxidized copper / verdigris. Warms toward raw copper on scroll. */
@@ -173,9 +176,9 @@ header::before{
 .vignette{
   position:absolute; inset:0; pointer-events:none;
   background:
-    linear-gradient(to bottom, oklch(0.14 0.026 196 / .8) 0%, transparent 24%, transparent 58%, oklch(0.14 0.026 196 / .9) 100%),
-    linear-gradient(to right, transparent 78%, oklch(0.14 0.026 196 / .72) 100%),
-    radial-gradient(125% 85% at 50% 50%, transparent 34%, oklch(0.14 0.026 196 / .62) 100%);
+    linear-gradient(to bottom, oklch(0.14 0.026 196 / .52) 0%, transparent 16%,
+                    transparent 78%, oklch(0.14 0.026 196 / .55) 100%),
+    linear-gradient(to right, transparent 88%, oklch(0.14 0.026 196 / .38) 100%);
 }
 
 /* Sticky .stage consumes 100svh of flow — pull the beats back up over it. */
@@ -185,27 +188,9 @@ header::before{
   display:flex; align-items:center;
   padding-block:6rem;
 }
-/* Scrim rides the full-bleed .beat, never the text box — a gradient
-   inside a text-sized box always reveals its own rectangle. */
-.beat{
-  background:radial-gradient(72% 62% at 20% 50%,
-    oklch(0.10 0.02 198 / .93) 0%,
-    oklch(0.10 0.02 198 / .62) 46%,
-    oklch(0.10 0.02 198 / 0) 80%);
-}
-.beat[data-align="end"]{
-  background:radial-gradient(72% 62% at 80% 50%,
-    oklch(0.10 0.02 198 / .93) 0%,
-    oklch(0.10 0.02 198 / .62) 46%,
-    oklch(0.10 0.02 198 / 0) 80%);
-}
 .beat-inner{
-  width:min(100% - 3rem, 36rem);
+  width:min(100% - 3rem, 34rem);
   margin-left:clamp(1.5rem,7vw,6rem);
-}
-.beat[data-align="end"] .beat-inner{
-  margin-left:auto;
-  margin-right:clamp(1.5rem,7vw,6rem);
 }
 
 .temp{
@@ -231,24 +216,30 @@ header::before{
   text-wrap:pretty;
 }
 
+.panel{
+  background:oklch(0.12 0.02 198 / .38);
+  border:1px solid oklch(1 0 0 / .085);
+  padding:1.85rem 2.05rem 1.95rem;
+  backdrop-filter:blur(2.5px);
+  -webkit-backdrop-filter:blur(2.5px);
+}
+.w{ display:inline-block; will-change:transform,opacity; }
+
 /* Hero sits inside the film so the first frame is the backdrop */
 .hero{
   min-height:100svh;
   display:flex; align-items:flex-end;
   padding:0 0 clamp(4rem,10vh,7rem);
-  background:radial-gradient(76% 64% at 22% 74%,
-    oklch(0.10 0.02 198 / .9) 0%,
-    oklch(0.10 0.02 198 / .58) 46%,
-    oklch(0.10 0.02 198 / 0) 80%);
+  
 }
 .hero-inner{
-  width:min(100% - 3rem, 50rem);
+  width:min(100% - 3rem, 44rem);
   margin-left:clamp(1.5rem,7vw,6rem);
 }
 .hero h1{
   font-family:'Fraunces',serif;
   font-weight:700;
-  font-size:clamp(2.3rem,6.2vw,4.6rem);
+  font-size:clamp(2.1rem,5.4vw,3.9rem);
   line-height:1.04;
   letter-spacing:-.032em;
   text-wrap:balance;
@@ -389,7 +380,7 @@ footer{
 /* ── Responsive ─────────────────────────────────────── */
 @media (max-width:820px){
   .rail{ display:none; }
-  .beat-inner, .beat[data-align="end"] .beat-inner, .hero-inner{
+  .beat-inner, .hero-inner{
     margin-inline:1.5rem; width:calc(100% - 3rem);
   }
   .readout{ display:none; }
@@ -406,6 +397,8 @@ footer{
   .stage{ position:relative; height:70svh; }
   .film{ height:auto !important; }
   .beats{ margin-top:0; }
+  .w,.rev,.tag li,.fact,.beat-inner,.hero-inner,.temp{
+    opacity:1 !important; transform:none !important; visibility:visible !important; }
   .beat{ min-height:auto; padding-block:3.5rem; }
   .scroll-cue i{ animation:none; }
 }
@@ -446,42 +439,42 @@ footer{
     <div class="beats">
 
       <div class="hero">
-        <div class="hero-inner">
-          <h1>Someone has kept this house warm since 1987.</h1>
-          <p>Her furnace carries a paper tag with nine names on it. At 4:12 on the coldest morning of the year, we came to add the tenth.</p>
+        <div class="hero-inner panel">
+          <h1 data-split>Someone has kept this house warm since 1987.</h1>
+          <p data-split>Her furnace carries a paper tag with nine names on it. At 4:12 on the coldest morning of the year, we came to add the tenth.</p>
           <div class="scroll-cue"><i></i> Scroll to follow the call</div>
         </div>
       </div>
 
       <section class="beat" aria-labelledby="b1">
-        <div class="beat-inner">
+        <div class="beat-inner panel">
           <span class="temp">41°F · 04:12</span>
-          <h2 id="b1">The thermostat had stopped answering.</h2>
-          <p>Twenty-three degrees outside. A ninety-two-year-old woman, three blankets, and a house that had been quietly losing heat since midnight. She apologised for calling so early. They always do.</p>
+          <h2 id="b1" data-split>The thermostat had stopped answering.</h2>
+          <p data-split>Twenty-three degrees outside. A ninety-two-year-old woman, three blankets, and a house that had been quietly losing heat since midnight. She apologised for calling so early. They always do.</p>
         </div>
       </section>
 
-      <section class="beat" data-align="end" aria-labelledby="b2">
-        <div class="beat-inner">
+      <section class="beat" aria-labelledby="b2">
+        <div class="beat-inner panel">
           <span class="temp">47°F · 04:51</span>
-          <h2 id="b2">The panel tells the truth if you ask in order.</h2>
-          <p>Capacitor, flame sensor, pressure switch. Most failures announce themselves to anyone patient enough to read the sequence instead of guessing at it.</p>
+          <h2 id="b2" data-split>The panel tells the truth if you ask in order.</h2>
+          <p data-split>Capacitor, flame sensor, pressure switch. Most failures announce themselves to anyone patient enough to read the sequence instead of guessing at it.</p>
         </div>
       </section>
 
       <section class="beat" aria-labelledby="b3">
-        <div class="beat-inner">
+        <div class="beat-inner panel">
           <span class="temp">58°F · 06:20</span>
-          <h2 id="b3">Heat does not arrive all at once.</h2>
-          <p>It moves through a house the way trust does — slowly, one room outward, the far corners last. You do not leave until the far corners are warm.</p>
+          <h2 id="b3" data-split>Heat does not arrive all at once.</h2>
+          <p data-split>It moves through a house the way trust does — slowly, one room outward, the far corners last. You do not leave until the far corners are warm.</p>
         </div>
       </section>
 
-      <section class="beat" data-align="end" aria-labelledby="b4">
-        <div class="beat-inner">
+      <section class="beat" aria-labelledby="b4">
+        <div class="beat-inner panel">
           <span class="temp">68°F · 07:40</span>
-          <h2 id="b4">By breakfast she had her kitchen back.</h2>
-          <p>Then we showed her which panel to open, what the flashing light counts mean, and how to tell the difference between a furnace that is working hard and one that is in trouble.</p>
+          <h2 id="b4" data-split>By breakfast she had her kitchen back.</h2>
+          <p data-split>Then we showed her which panel to open, what the flashing light counts mean, and how to tell the difference between a furnace that is working hard and one that is in trouble.</p>
         </div>
       </section>
 
@@ -490,12 +483,12 @@ footer{
 
   <section class="record">
     <div class="wrap record-grid">
-      <div class="record-head">
-        <h2>Every furnace keeps a record of who showed up.</h2>
-        <p>It is a paper tag inside the door. No one designed it to be meaningful. Four decades later it is the only honest review a heating company ever gets.</p>
+      <div class="record-head rev">
+        <h2 data-split>Every furnace keeps a record of who showed up.</h2>
+        <p data-split>It is a paper tag inside the door. No one designed it to be meaningful. Four decades later it is the only honest review a heating company ever gets.</p>
       </div>
       <div class="tag-shell">
-        <div class="tag">
+        <div class="tag rev">
           <div class="tag-title">Service Record — Unit 4412-G</div>
           <ol>
             <li><span>11 · 1987</span><span>R.M.</span></li>
@@ -519,8 +512,8 @@ footer{
     <div class="wrap">
       <div class="close-grid">
         <div>
-          <h2>We answer at four in the morning.</h2>
-          <p>No dispatch fee on no-heat calls between November and March. If we cannot restore heat the same day, we bring loaner units and we do not charge for them.</p>
+          <h2 data-split>We answer at four in the morning.</h2>
+          <p data-split>No dispatch fee on no-heat calls between November and March. If we cannot restore heat the same day, we bring loaner units and we do not charge for them.</p>
           <a class="dial" href="tel:+18005550142">(800) 555-0142 <small>Seven days</small></a>
         </div>
         <dl class="facts">
@@ -609,127 +602,129 @@ footer{
     return Math.max(0, Math.min(1, -rect.top / span));
   }
 
-  var lastP = -1;
+  /* ── Split marked copy into per-word spans, once. ── */
+  function split(el){
+    if(el.dataset.done) return;
+    el.innerHTML = el.innerHTML.replace(/(<[^>]+>)|([^\s<]+)/g,
+      function(m, tag, word){ return tag ? tag : '<span class="w">' + word + '</span>'; });
+    el.dataset.done = '1';
+  }
+  [].forEach.call(document.querySelectorAll('[data-split]'), split);
 
-  function onScroll(){
-    var p = progress();
-    if(Math.abs(p - lastP) < 0.0005) return;
-    lastP = p;
-
-    target = p * (TOTAL - 1);
-
-    // Page warms with the house.
+  /* ── Motion is GSAP ScrollTrigger ────────────────────────────── */
+  function readout(p){
     document.documentElement.style.setProperty('--heat', p.toFixed(3));
-
-    // Thermostat readout: 41 -> 68
     thermo.textContent = Math.round(41 + p * 27) + '°F';
-
     for(var i = 0; i < ticks.length; i++){
       var at = parseFloat(ticks[i].dataset.to);
-      var next = ticks[i + 1] ? parseFloat(ticks[i + 1].dataset.to) : 1.01;
+      var next = ticks[i+1] ? parseFloat(ticks[i+1].dataset.to) : 1.01;
       ticks[i].dataset.on = (p >= at - 0.02 && p < next - 0.02) ? '1' : '0';
     }
   }
 
-  /* ── rAF drives everything ──────────────────────────
-     Progress is read here rather than in a scroll handler:
-     scroll events are throttled, coalesced, and in some
-     embedded webviews never fire at all. One rect read per
-     frame is cheap and never misses.                     */
-  var lastRaf = 0;
+  function build(){
+    gsap.registerPlugin(ScrollTrigger);
+    var mm = gsap.matchMedia();
 
-  function loop(){
-    lastRaf = performance.now();
-    onScroll();
-    eased += (target - eased) * 0.14;
-    if(Math.abs(target - eased) < 0.01) eased = target;
-    paint(eased);
-    requestAnimationFrame(loop);
+    mm.add('(prefers-reduced-motion: no-preference)', function(){
+      var f = { i: 0 };
+      gsap.to(f, {
+        i: TOTAL - 1, ease: 'none',
+        onUpdate: function(){ paint(f.i); },
+        scrollTrigger: {
+          trigger: film, start: 'top top', end: 'bottom bottom', scrub: 0.5,
+          onUpdate: function(self){ readout(self.progress); }
+        }
+      });
+
+      gsap.utils.toArray('.hero-inner, .beat-inner').forEach(function(box){
+        var words = box.querySelectorAll('.w');
+        var temp  = box.querySelector('.temp');
+        var tl = gsap.timeline({ scrollTrigger: {
+          trigger: box.closest('.hero, .beat'),
+          start: 'top bottom', end: 'bottom top', scrub: 0.7
+        }});
+        tl.fromTo(box, { autoAlpha:0, y:26 }, { autoAlpha:1, y:0, duration:0.55, ease:'power2.out' }, 0);
+        if(temp) tl.fromTo(temp, { autoAlpha:0, x:-14 }, { autoAlpha:1, x:0, duration:0.45 }, 0.10);
+        tl.fromTo(words, { autoAlpha:0, y:20 },
+          { autoAlpha:1, y:0, duration:0.6, ease:'power2.out', stagger:{ each:0.045 } }, 0.15);
+        tl.to({}, { duration:1.15 });
+        tl.to(words, { autoAlpha:0, y:-14, duration:0.45, stagger:{ each:0.02 } }, '>');
+        tl.to(box,   { autoAlpha:0, y:-22, duration:0.5 }, '<0.05');
+      });
+
+      gsap.utils.toArray('.rev').forEach(function(el){
+        var words = el.querySelectorAll('.w');
+        var trig  = { trigger: el, start: 'top 86%', once: true };
+        if(words.length){
+          gsap.from(words, { autoAlpha:0, y:18, duration:0.75, ease:'power3.out',
+            stagger:0.035, scrollTrigger:trig });
+        } else {
+          gsap.from(el, { autoAlpha:0, y:22, duration:0.8, ease:'power3.out', scrollTrigger:trig });
+        }
+      });
+
+      gsap.from('.tag', { autoAlpha:0, y:28, rotation:-2.6, duration:0.9, ease:'power3.out',
+        scrollTrigger:{ trigger:'.tag', start:'top 84%', once:true }});
+      gsap.from('.tag li', { autoAlpha:0, x:-18, duration:0.55, ease:'power2.out',
+        stagger:0.075, scrollTrigger:{ trigger:'.tag', start:'top 78%', once:true }});
+      gsap.from('.fact', { autoAlpha:0, y:20, duration:0.6, ease:'power2.out',
+        stagger:0.09, scrollTrigger:{ trigger:'.facts', start:'top 86%', once:true }});
+    });
+
+    mm.add('(prefers-reduced-motion: reduce)', function(){ paint(0); readout(0); });
   }
 
-  /* Force an immediate, un-eased sync. Used on resize, after
-     programmatic scrolling, and anywhere rAF may be suspended. */
-  function sync(){
-    lastP = -1;
-    onScroll();
-    eased = target;
-    paint(eased);
-  }
-  /* Jump to a point in the film, 0..1. Also powers ?at= deep links. */
   function jumpTo(f){
     f = Math.max(0, Math.min(1, f));
     var r = film.getBoundingClientRect();
     window.scrollTo(0, window.scrollY + r.top + (r.height - window.innerHeight) * f);
-    sync();
+    if(window.ScrollTrigger) ScrollTrigger.update();
   }
+  window.filmScrub = { jumpTo: jumpTo, sync: function(){ if(window.ScrollTrigger) ScrollTrigger.update(); } };
 
-  window.filmScrub = { sync: sync, jumpTo: jumpTo };
-
-  /* ── Preload ── */
   function bump(){
     loaded++;
-    var p = loaded / TOTAL;
-    fill.style.width = (p * 100).toFixed(1) + '%';
-    pct.textContent = Math.round(p * 100) + '%';
-    if(loaded === TOTAL && !ready){
-      ready = true;
-      loader.hidden = true;
-      size();
-      var at = new URLSearchParams(location.search).get('at');
-      if(at !== null && !isNaN(parseFloat(at))) jumpTo(parseFloat(at));
-      else sync();
-    }
+    var pr = loaded / TOTAL;
+    fill.style.width = (pr*100).toFixed(1) + '%';
+    pct.textContent = Math.round(pr*100) + '%';
+    if(loaded === TOTAL && !ready) start();
+  }
+
+  function start(){
+    ready = true; loader.hidden = true;
+    layout(); size(); paint(0);
+    build(); ScrollTrigger.refresh();
+    var at = new URLSearchParams(location.search).get('at');
+    if(at !== null && !isNaN(parseFloat(at))) jumpTo(parseFloat(at));
   }
 
   for(var i = 0; i < TOTAL; i++){
     (function(n){
       var img = new Image();
       img.decoding = 'async';
-      img.onload  = function(){ if(n === 0){ size(); } bump(); };
+      img.onload  = function(){ if(n === 0){ size(); paint(0); } bump(); };
       img.onerror = bump;
       img.src = src(n);
       images[n] = img;
     })(i);
   }
 
-  /* ── Film height: scroll room proportional to frame count ── */
-  function layout(){
-    if(reduce){ film.style.height = 'auto'; return; }
-    // ~4.6vh of scroll per beat-set; 520vh gives ~3.6vh per frame — smooth without dragging.
-    film.style.height = '520vh';
-  }
-
+  function layout(){ film.style.height = reduce ? 'auto' : '520vh'; }
   layout();
-  window.addEventListener('resize', function(){ layout(); size(); sync(); });
-
-  if(reduce){
-    // No scrub: hold a single frame, keep every beat readable.
-    window.addEventListener('scroll', onScroll, { passive:true });
-  } else {
-    requestAnimationFrame(loop);
-    // If rAF is throttled or suspended (background tab, embedded
-    // webviews), drive from scroll instead so the frame never goes stale.
-    window.addEventListener('scroll', function(){
-      if(performance.now() - lastRaf > 250) sync();
-    }, { passive:true });
-  }
+  window.addEventListener('resize', function(){
+    layout(); size(); if(window.ScrollTrigger) ScrollTrigger.refresh();
+  });
 
   ticks.forEach(function(btn){
     btn.addEventListener('click', function(){
-      var p = parseFloat(btn.dataset.to);
-      var rect = film.getBoundingClientRect();
-      var top = window.scrollY + rect.top;
-      var span = rect.height - window.innerHeight;
-      window.scrollTo({ top: top + span * p, behavior:'smooth' });
+      var f = parseFloat(btn.dataset.to);
+      var r = film.getBoundingClientRect();
+      window.scrollTo({ top: window.scrollY + r.top + (r.height - window.innerHeight) * f, behavior:'smooth' });
     });
   });
 
-  // Fallback: never trap the user behind a stalled preload.
-  setTimeout(function(){
-    if(!ready){ ready = true; loader.hidden = true; size(); onScroll(); }
-  }, 9000);
-
-  onScroll();
+  setTimeout(function(){ if(!ready) start(); }, 9000);
 })();
 </script>
 </body>

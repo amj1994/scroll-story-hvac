@@ -4,7 +4,11 @@ A cinematic scroll-scrub landing page. One continuous 8-second take is decoded
 into a frame sequence and scrubbed by scroll position, so the story advances as
 the visitor reads. Live reference build: **Tenth** (HVAC).
 
-Static HTML. No build step, no dependencies, no framework.
+Static HTML, no build step. One dependency: **GSAP + ScrollTrigger** (CDN).
+
+> **Licensing — check before selling.** GSAP is loaded from a CDN rather than
+> vendored in on purpose. Confirm the current GSAP licence covers
+> redistribution inside a template you charge for before shipping to a buyer.
 
 ---
 
@@ -41,6 +45,21 @@ So this ships **frames, not video**:
 
 The easing is what makes it feel smooth rather than twitchy. Once loaded it
 cannot stall, because there is no decoding left to do.
+
+Motion is **GSAP ScrollTrigger**: the frame index, the copy reveals, and the
+lower-section staggers are all scrubbed against scroll position rather than
+timed. `gsap.matchMedia()` carries the reduced-motion branch.
+
+## Scrim weight — the rule that matters
+
+Do **not** put a full-bleed gradient behind the copy. It reads as a dark
+horizontal band smeared across the footage and wrecks the shot. The video is
+the product.
+
+Copy sits in a **tight bounded panel** instead — light translucent tint,
+hairline border, slight backdrop blur — so the footage stays visible straight
+through it. The global vignette carries only enough weight to keep the fixed
+header and rail legible. All copy sits left; never alternate sides.
 
 `rAF` is the primary driver and a `scroll` listener is a fallback for
 environments that suspend `rAF` (background tabs, some embedded webviews).
